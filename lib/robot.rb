@@ -61,8 +61,6 @@ class Robot
 
   def report
     raise InvalidCommand.new unless placed?
-
-    puts "#{@x_position},#{@y_position},#{@facing}"
     "#{@x_position},#{@y_position},#{@facing}"
   end
 
@@ -76,12 +74,13 @@ class Robot
     @directions.find_index(@facing)
   end
 
-  def check_movement(range, current_pos)
-    raise InvalidCommand.new('robot will fall from the table if we move further, turn robot to another direction first.') if range === current_pos
+  def check_movement(current_pos, range)
+    raise InvalidCommand.new('Invalid input, robot will fall from the table') unless range === current_pos
   end
 
   def valid_position?(x_position, y_position)
-    @table.x_range === x_position && @table.y_range === y_position
+    (@table.x_range === x_position.to_i) &&
+        (@table.y_range === y_position.to_i)
   end
 
   def valid_direction?(direction)

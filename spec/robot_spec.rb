@@ -7,7 +7,6 @@ describe Robot do
   context '.Invalid' do
     it {expect{robot.place}.to raise_error(ArgumentError)}
     it {expect{robot.place('a', 'b', 'c')}.to raise_error(InvalidCommand)}
-    it {expect{robot.place('a', 'b', 'NORTH')}.to raise_error(InvalidCommand)}
     it {expect{robot.place(1, 2, 'N')}.to raise_error(InvalidCommand)}
     it {expect{robot.place(-1, 5, 'NORTH')}.to raise_error(InvalidCommand)}
 
@@ -45,6 +44,15 @@ describe Robot do
       robot.right
       robot.move
       expect(robot.report).to eq('2,3,NORTH')
+    end
+
+    it 'example 5' do
+      robot.place(0,0,'NORTH')
+      robot.move
+      expect(robot.report).to eq('0,1,NORTH')
+      robot.left
+      expect(robot.report).to eq('0,1,WEST')
+      expect{robot.move}.to raise_error(InvalidCommand, 'Invalid input, robot will fall from the table')
     end
   end
 end

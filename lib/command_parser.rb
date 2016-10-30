@@ -6,17 +6,24 @@ class CommandParser
 
   def initialize(argv,out=STDOUT)
     @robot=Robot.new
-    command = argv[0]
 
-    case command
-      when 'PLACE'
-        raise InvalidCommand.new if argv[1].nil?
-        x, y, facing = argv[1].split(',')
-        @robot.send('place', x, y, facing)
-      when 'LEFT', 'RIGHT', 'MOVE', 'REPORT'
-        @robot.send(command.downcase)
-      else
-        out.puts "Invalid command detected. Valid commands are:\n  PLACE X,Y,F\n  MOVE\n  LEFT\n  RIGHT\n  REPORT"
+    @index = 0
+
+    while @index < argv.length
+      case command = argv[@index]
+        when 'PLACE'
+          x, y, facing = argv[@index+1].split(',')
+          @robot.send('place', x, y, facing)
+          @index += 2
+        when 'LEFT', 'RIGHT', 'MOVE'
+          @robot.send(command.downcase)
+          @index += 1
+        when 'REPORT'
+          puts @robot.report
+          @index += 1
+        else
+          raise InvalidCommand.new "Invalid command detected. Valid commands are:\n  PLACE X,Y,F\n  MOVE\n  LEFT\n  RIGHT\n  REPORT"
+      end
     end
   end
 end
